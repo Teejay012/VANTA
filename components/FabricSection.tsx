@@ -6,6 +6,7 @@ import { gsap } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
 import { ASSETS } from "@/lib/assets";
 import { hasWebGL } from "@/lib/webgl";
+import EditorialImage from "@/components/ui/EditorialImage";
 
 // three.js is ~150kB gzipped — keep it out of the first load and off the server.
 const ClothCanvas = dynamic(() => import("./fabric/ClothCanvas"), {
@@ -114,11 +115,11 @@ export default function FabricSection() {
             <ClothCanvas progressRef={progressRef} />
           ) : (
             // Fallback: the same photographed weave, held still.
-            <img
+            <EditorialImage
               src={ASSETS.fabric}
               alt="Draped woven technical nylon"
+              wrapperClassName="h-full w-full"
               className="h-full w-full object-cover grayscale"
-              draggable={false}
             />
           )}
         </div>
@@ -144,7 +145,7 @@ export default function FabricSection() {
                 <div key={line} className="overflow-hidden">
                   <h2
                     data-fabric-line
-                    className="display text-[15vw] leading-[0.84] text-ink sm:text-[8.5vw]"
+                    className="display text-[13vw] leading-[0.86] text-ink sm:text-[8.5vw]"
                   >
                     {line}
                   </h2>

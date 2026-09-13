@@ -12,7 +12,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@react-three/drei": "^10.0.6",
     "@react-three/fiber": "^9.1.2",
     "gsap": "^3.12.7",
     "lenis": "^1.2.3",

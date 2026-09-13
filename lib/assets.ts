@@ -10,11 +10,21 @@
  * is a no-op once `public/assets` is populated.
  */
 
+/** Builds a numbered frame sequence: prefix-01.webp … prefix-0N.webp */
+const sequence = (prefix: string, count: number) =>
+  Array.from(
+    { length: count },
+    (_, i) => `/assets/${prefix}-${String(i + 1).padStart(2, "0")}.webp`,
+  );
+
 export const ASSETS = {
-  /** Hero — male model, background removed so he can be layered mid-ground. */
-  heroMale: "/assets/hero-male.webp",
-  /** Hero — female model, background removed. */
-  heroFemale: "/assets/hero-female.webp",
+  /**
+   * Hero — six-frame walk cycles, backgrounds removed so the models layer
+   * between the wordmark and the foreground copy. Scroll drives both the
+   * traverse and the stride, so they actually walk rather than slide.
+   */
+  heroMaleFrames: sequence("walk-male", 6),
+  heroFemaleFrames: sequence("walk-female", 6),
 
   /** Section 2 — category cards. */
   categoryMen: "/assets/category-men.webp",
@@ -24,12 +34,10 @@ export const ASSETS = {
 
   /** Section 3 — woven technical nylon, used as the cloth shader's albedo map. */
   fabric: "/assets/fabric.webp",
-  /** Section 3 — campaign still used behind the drape. */
-  editorial: "/assets/editorial.webp",
 
-  /** Section 4 — flat references for the 3D wardrobe items. */
-  garmentJacket: "/assets/garment-jacket.webp",
-  garmentBag: "/assets/garment-bag.webp",
+  /** Section 5 — the closing campaign spread. */
+  editorial: "/assets/editorial.webp",
+  editorialPortrait: "/assets/editorial-portrait.webp",
 } as const;
 
 export type AssetKey = keyof typeof ASSETS;

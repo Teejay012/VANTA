@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import HoverText from "@/components/ui/HoverText";
 
 const PRIMARY = ["MEN", "WOMEN", "KIDS", "BEAUTY"];
 const UTILITY = ["SEARCH", "LOGIN", "WISHLIST", "CART (0)"];
@@ -46,35 +47,40 @@ export default function Navigation() {
         <ul className="hidden gap-7 text-[10px] tracking-[0.22em] md:flex">
           {PRIMARY.map((item) => (
             <li key={item}>
-              <a href="#categories" className="transition-opacity hover:opacity-50">
-                {item}
+              <a href="#categories" className="inline-block">
+                <HoverText>{item}</HoverText>
               </a>
             </li>
           ))}
         </ul>
 
         {/* Mobile: a single condensed entry point keeps the bar uncluttered. */}
-        <span className="text-[10px] tracking-[0.22em] md:hidden">MENU</span>
+        <HoverText className="text-[10px] tracking-[0.22em] md:hidden">
+          MENU
+        </HoverText>
 
-        <a
-          href="#top"
-          className="display text-xl tracking-[0.32em] sm:text-2xl"
-          aria-label="VANTA — home"
-        >
-          VANTA
+        <a href="#top" className="inline-block" aria-label="VANTA — home">
+          <HoverText
+            className="display text-xl tracking-[0.32em] sm:text-2xl"
+            stagger={0.03}
+          >
+            VANTA
+          </HoverText>
         </a>
 
         <ul className="hidden gap-6 text-[10px] tracking-[0.22em] md:flex">
           {UTILITY.map((item) => (
             <li key={item}>
-              <a href="#wardrobe" className="transition-opacity hover:opacity-50">
-                {item}
+              <a href="#wardrobe" className="inline-block">
+                <HoverText>{item}</HoverText>
               </a>
             </li>
           ))}
         </ul>
 
-        <span className="text-[10px] tracking-[0.22em] md:hidden">CART (0)</span>
+        <HoverText className="text-[10px] tracking-[0.22em] md:hidden">
+          CART (0)
+        </HoverText>
       </nav>
     </header>
   );

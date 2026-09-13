@@ -1,22 +1,282 @@
 {
-  "_comment": "Upstream sources for the images in public/assets. Every file here was generated with Higgsfield; `npm run assets:sync` mirrors them into the repo so the running site never touches a third-party CDN. Once public/assets is committed, the sync is a no-op and the URLs below are only provenance.",
+  "_comment": "Upstream sources for public/assets. Everything was generated with Higgsfield; `npm run assets:sync` mirrors them into the repo so the running site never requests a third-party CDN. Once public/assets is committed the sync is a no-op and these URLs are only provenance.",
   "cdn": "https://d8j0ntlcm91z4.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB",
   "assets": [
     {
-      "name": "hero-male",
-      "file": "hf_20260913_134025_547c2409-30b7-45e1-a7c0-8f3a8f885043.png",
-      "height": 1600,
+      "name": "walk-male-01",
+      "file": "hf_20260913_151112_2e317b70-3765-4eff-a81e-42c098e87c1f.png",
+      "height": 1400,
       "alpha": true,
-      "quality": 82,
-      "note": "Hero model, background removed \u2014 alpha must survive."
+      "quality": 80
     },
     {
-      "name": "hero-female",
-      "file": "hf_20260913_134129_961cc757-135f-429f-843a-d7a4906b0f79.png",
-      "height": 1600,
+      "name": "walk-male-02",
+      "file": "hf_20260913_151113_a4719a18-7362-450c-bcba-5fcc23a23be7.png",
+      "height": 1400,
       "alpha": true,
-      "quality": 82,
-      "note": "Hero model, background removed \u2014 alpha must survive."
+      "quality": 80
+    },
+    {
+      "name": "walk-male-03",
+      "file": "hf_20260913_151333_42b02fe9-2d87-44a9-8384-55f3e29c8b52.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-male-04",
+      "file": "hf_20260913_151115_4a0c6f13-4136-440c-8815-281d1d739b54.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-male-05",
+      "file": "hf_20260913_151117_56aa0ff2-a9a6-4267-95de-8e04e5030760.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-male-06",
+      "file": "hf_20260913_151119_105ff534-6737-4086-aa4c-b3300dfbdcd0.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-female-01",
+      "file": "hf_20260913_151134_6ea51396-dbf7-490b-9cb1-ca31ee60d02e.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-female-02",
+      "file": "hf_20260913_151135_921c46a0-da79-465b-8db3-db635bdf5ae2.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-female-03",
+      "file": "hf_20260913_151137_07450591-f042-4325-9a97-0fa3401a7de5.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-female-04",
+      "file": "hf_20260913_151139_e9300650-2444-4f78-af95-d52a917abce7.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-female-05",
+      "file": "hf_20260913_151141_653403ee-8122-4769-8c2e-65faef06a908.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "walk-female-06",
+      "file": "hf_20260913_151142_30ef7339-b587-4fa0-8eb2-3b5aabc24c17.png",
+      "height": 1400,
+      "alpha": true,
+      "quality": 80
+    },
+    {
+      "name": "spin-bomber-01",
+      "file": "hf_20260913_150927_8c2f58ed-7939-4a30-9d0a-ca8ffe19bfd1.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-bomber-02",
+      "file": "hf_20260913_151204_0af0bc01-85ac-4118-8a01-04e489cc2703.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-bomber-03",
+      "file": "hf_20260913_151204_b4b74a84-6d44-4822-9694-9fd809d34af6.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-bomber-04",
+      "file": "hf_20260913_151204_1a2f15b3-4fe8-49fa-bb34-fb076dab550a.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-bomber-05",
+      "file": "hf_20260913_151204_93d8aa1c-cf1a-4cf7-8228-a062420b1275.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-bomber-06",
+      "file": "hf_20260913_151204_c61bb631-3b2d-44cc-8311-e389ad42ea0f.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-bomber-07",
+      "file": "hf_20260913_151204_7705bd7f-4b97-4bfe-b7c7-efd49703fc61.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-bomber-08",
+      "file": "hf_20260913_151350_6dc45ee0-6c6f-4610-a04e-5854fafc3bea.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-trench-01",
+      "file": "hf_20260913_150927_3cc2dcc5-a2c2-4c5b-8369-de673d2f2668.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-trench-02",
+      "file": "hf_20260913_151204_2a7a8f92-5729-4391-9b9f-6b4af7b20396.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-trench-03",
+      "file": "hf_20260913_151204_0dd93fac-5d52-4acc-8f1d-5367e176ca5c.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-trench-04",
+      "file": "hf_20260913_151350_85d728d2-86c5-4861-8d30-26a8f0facf07.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-trench-05",
+      "file": "hf_20260913_151350_092092a4-2aa4-4455-8723-6cd54ee8669d.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-trench-06",
+      "file": "hf_20260913_151351_7ed7917a-79ed-4fae-928c-bad8e6c1d129.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-trench-07",
+      "file": "hf_20260913_151350_7d53ab22-0bcf-4de7-9af9-1d4ddb4bb2e9.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-trench-08",
+      "file": "hf_20260913_151350_6e0bc5c0-9393-4b4e-9fa5-1f905356571e.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-tote-01",
+      "file": "hf_20260913_150927_0e369ad4-822f-4399-ad8e-4832e1a9f1be.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-tote-02",
+      "file": "hf_20260913_151658_4c872a03-2576-4741-a8b0-ac6c6599ef98.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-tote-03",
+      "file": "hf_20260913_151350_3e30e139-e2a7-4571-84b5-dd6431d6e864.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-tote-04",
+      "file": "hf_20260913_151351_1005be77-9e23-4380-a822-06baf27807ed.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-tote-05",
+      "file": "hf_20260913_151350_d2f947ac-a677-4133-bb83-9dedc451201f.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-tote-06",
+      "file": "hf_20260913_151818_95bf47e3-665a-4e61-b1d0-dc543ee3e671.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-tote-07",
+      "file": "hf_20260913_151658_10ba5478-8d03-4379-99e1-e8e1ed65d099.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-tote-08",
+      "file": "hf_20260913_151817_f02cda18-1150-447d-8a62-bde28e188942.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-boot-01",
+      "file": "hf_20260913_150927_55847c67-a8be-41e9-a474-665624a0fc02.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-boot-02",
+      "file": "hf_20260913_151658_75737943-37d8-47e2-9c72-a36d40602333.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-boot-03",
+      "file": "hf_20260913_151658_86c257d5-4153-418a-9ed8-33127bc7e3e8.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-boot-04",
+      "file": "hf_20260913_151658_191810cb-66ae-4c03-bf94-a95edd242aaa.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-boot-05",
+      "file": "hf_20260913_151658_f56c212b-575a-4f76-8895-032cd2611e00.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-boot-06",
+      "file": "hf_20260913_151658_16d470bd-ae0e-41ed-8df1-ffdced6e4674.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-boot-07",
+      "file": "hf_20260913_151658_851f8580-c366-4cf7-937b-d21ed48600ef.png",
+      "width": 880,
+      "quality": 78
+    },
+    {
+      "name": "spin-boot-08",
+      "file": "hf_20260913_151817_579e3ddc-e022-4780-8828-cbd3e7ea71c8.png",
+      "width": 880,
+      "quality": 78
     },
     {
       "name": "category-men",
@@ -46,8 +306,7 @@
       "name": "fabric",
       "file": "hf_20260913_133910_026b6734-925a-4781-8e86-5f2792895f71.png",
       "width": 2000,
-      "quality": 86,
-      "note": "Sampled as a GPU texture \u2014 keep the weave detail."
+      "quality": 86
     },
     {
       "name": "editorial",
@@ -56,23 +315,10 @@
       "quality": 82
     },
     {
-      "name": "garment-jacket",
-      "file": "hf_20260913_133910_93928abb-d69b-4a10-872b-466d03045787.png",
-      "width": 900,
-      "quality": 80
-    },
-    {
-      "name": "garment-bag",
-      "file": "hf_20260913_133910_97415d8e-1430-49c2-a32f-6a24b680de12.png",
-      "width": 900,
-      "quality": 80
-    },
-    {
-      "name": "garment-bomber",
-      "file": "hf_20260913_134148_a2fa735f-8a68-480d-af26-b7b9784af5ff.glb",
-      "raw": true,
-      "ext": "glb",
-      "note": "Optional 3D mesh for the wardrobe carousel \u2014 see lib/wardrobe.ts. Copied byte-for-byte; sharp is not involved."
+      "name": "editorial-portrait",
+      "file": "hf_20260913_151658_d8972258-6a6e-4a2c-bf85-49db78dd394f.png",
+      "width": 1200,
+      "quality": 82
     }
   ]
 }

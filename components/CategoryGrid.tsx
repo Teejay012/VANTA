@@ -6,6 +6,8 @@ import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
 import { ASSETS } from "@/lib/assets";
 import TiltCard from "@/components/ui/TiltCard";
 import MagneticButton from "@/components/ui/MagneticButton";
+import HoverText from "@/components/ui/HoverText";
+import EditorialImage from "@/components/ui/EditorialImage";
 
 const CATEGORIES = [
   {
@@ -158,13 +160,14 @@ export default function CategoryGrid() {
           <TiltCard key={category.title} className="group" max={7}>
             <article data-category-card className="will-change-transform">
               <div className="relative aspect-[4/5] overflow-hidden bg-ink-soft">
-                <img
-                  data-category-media
-                  src={category.image}
-                  alt={`${category.title} collection`}
-                  className="h-[114%] w-full -translate-y-[6%] object-cover grayscale transition-transform duration-[1.2s] ease-[var(--ease-editorial)] group-hover:scale-[1.06]"
-                  draggable={false}
-                />
+                <div data-category-media className="h-[114%] w-full -translate-y-[6%]">
+                  <EditorialImage
+                    src={category.image}
+                    alt={`${category.title} collection`}
+                    wrapperClassName="h-full w-full"
+                    className="h-full w-full object-cover grayscale transition-transform duration-[1.2s] ease-[var(--ease-editorial)] group-hover:scale-[1.06]"
+                  />
+                </div>
 
                 {/* Floating index — never intercepts the pointer. */}
                 <span
@@ -178,9 +181,11 @@ export default function CategoryGrid() {
                 <div className="pointer-events-none absolute inset-0 bg-ink/25 transition-opacity duration-700 group-hover:opacity-0" />
               </div>
 
-              <div data-tilt-layer className="pointer-events-none mt-6">
-                <h3 className="display text-2xl">{category.title}</h3>
-                <p className="mt-2 text-xs font-light leading-relaxed text-smoke">
+              <div data-tilt-layer className="mt-6">
+                <HoverText as="h3" className="display text-2xl">
+                  {category.title}
+                </HoverText>
+                <p className="mt-2 text-xs font-light leading-relaxed text-smoke transition-colors duration-500 group-hover:text-bone">
                   {category.copy}
                 </p>
               </div>
@@ -190,7 +195,7 @@ export default function CategoryGrid() {
                   href="#wardrobe"
                   className="border-b border-bone/30 pb-1.5 text-[10px] tracking-[0.24em] text-bone transition-colors hover:border-bone"
                 >
-                  SHOP {category.title}
+                  <HoverText>{`SHOP ${category.title}`}</HoverText>
                   <span aria-hidden className="translate-y-px">
                     &#8594;
                   </span>

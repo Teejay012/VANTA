@@ -4,6 +4,11 @@ import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
 import { ASSETS } from "@/lib/assets";
+import WalkingModel, { setWalkFrame } from "@/components/hero/WalkingModel";
+import HoverText from "@/components/ui/HoverText";
+
+/** Full stride cycles each model completes while crossing the stage. */
+const STRIDES = 4;
 
 /**
  * SECTION 1 — The Runway Hero.
@@ -20,12 +25,16 @@ import { ASSETS } from "@/lib/assets";
  *   45 → 50   a beat — the runway light sweeps, the stage is empty
  *   50 → 95   the female model enters from the left and exits right
  *   95 → 100  the stage dissolves and releases into Section 2
+ *
+ * Each model is a stack of six walk-cycle frames rather than one still. The
+ * scroll position drives both the traverse *and* the stride, so the models
+ * actually walk — legs passing, weight dropping — instead of sliding.
  */
 export default function RunwayHero() {
   const trackRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const maleRef = useRef<HTMLImageElement>(null);
-  const femaleRef = useRef<HTMLImageElement>(null);
+  const maleRef = useRef<HTMLDivElement>(null);
+  const femaleRef = useRef<HTMLDivElement>(null);
   const wordmarkRef = useRef<HTMLHeadingElement>(null);
   const chromeRef = useRef<HTMLDivElement>(null);
   const sweepRef = useRef<HTMLDivElement>(null);
@@ -35,10 +44,17 @@ export default function RunwayHero() {
     // gsap.context scopes every selector and animation created inside it so a
     // single revert() on unmount cleans up tweens *and* ScrollTriggers.
     const ctx = gsap.context(() => {
+      const frameCount = ASSETS.heroMaleFrames.length;
+
       // How far off-stage a model has to travel to clear the viewport. Written
       // as a function so `invalidateOnRefresh` can recompute it on resize.
       const exit = () => window.innerWidth * 0.95;
       const entry = () => -window.innerWidth * 0.95;
+
+      /** Maps a 0..1 traverse into a looping stride frame. */
+      const strideFrame = (local: number) =>
+        Math.floor(gsap.utils.clamp(0, 0.9999, local) * STRIDES * frameCount) %
+        frameCount;
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -52,8 +68,19 @@ export default function RunwayHero() {
           scrub: 1.1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
+            const p = self.progress;
+
             if (progressRef.current) {
-              progressRef.current.style.transform = `scaleX(${self.progress})`;
+              progressRef.current.style.transform = `scaleX(${p})`;
+            }
+
+            // Advance whichever model is currently on the runway. Driving this
+            // from onUpdate rather than a tween keeps the stride locked to the
+            // *smoothed* scrub position, so the feet match the body.
+            if (p < 0.5) {
+              setWalkFrame(maleRef.current, strideFrame(p / 0.45));
+            } else {
+              setWalkFrame(femaleRef.current, strideFrame((p - 0.5) / 0.45));
             }
           },
         },
@@ -67,11 +94,17 @@ export default function RunwayHero() {
         { x: exit, scale: 1.06, duration: 45 },
         0,
       )
-        // A walking bob layered on top of the traverse. Because the parent
-        // timeline is scrubbed, the repeat reads as footfalls as you scroll.
+        // A vertical bob on top of the traverse. The frames already carry the
+        // leg motion; this is the body's rise and fall through the cycle.
         .to(
           maleRef.current,
-          { y: -14, duration: 5.625, repeat: 7, yoyo: true, ease: "sine.inOut" },
+          {
+            y: -12,
+            duration: 45 / (STRIDES * 2),
+            repeat: STRIDES * 2 - 1,
+            yoyo: true,
+            ease: "sine.inOut",
+          },
           0,
         )
         .to(maleRef.current, { opacity: 0, duration: 6 }, 39);
@@ -80,7 +113,7 @@ export default function RunwayHero() {
 
       tl.fromTo(
         wordmarkRef.current,
-        { scale: 1, letterSpacing: "-0.05em", opacity: 1 },
+        { scale: 1, letterSpacing: "-0.045em", opacity: 1 },
         { scale: 1.14, letterSpacing: "0.02em", opacity: 0.9, duration: 95 },
         0,
       );
@@ -99,12 +132,7 @@ export default function RunwayHero() {
 
       /* -- Phase 3 (50 → 95): the female model crosses the stage ------------ */
 
-      tl.fromTo(
-        femaleRef.current,
-        { x: entry, opacity: 0, scale: 0.94 },
-        { opacity: 1, duration: 6 },
-        50,
-      )
+      tl.fromTo(femaleRef.current, { opacity: 0 }, { opacity: 1, duration: 6 }, 50)
         .fromTo(
           femaleRef.current,
           { x: entry, scale: 0.94 },
@@ -113,7 +141,13 @@ export default function RunwayHero() {
         )
         .to(
           femaleRef.current,
-          { y: -14, duration: 5.625, repeat: 7, yoyo: true, ease: "sine.inOut" },
+          {
+            y: -12,
+            duration: 45 / (STRIDES * 2),
+            repeat: STRIDES * 2 - 1,
+            yoyo: true,
+            ease: "sine.inOut",
+          },
           50,
         )
         .to(femaleRef.current, { opacity: 0, duration: 6 }, 89);
@@ -167,23 +201,21 @@ export default function RunwayHero() {
 
         {/*
           -- Mid-ground: the models -------------------------------------
-          Both are cut out (background removed) so they sit between the
-          wordmark and the foreground copy. `pointer-events-none` keeps them
-          from swallowing clicks meant for the UI beneath.
+          Cutouts (background removed) so they sit between the wordmark and
+          the foreground copy. `pointer-events-none` keeps them from
+          swallowing clicks meant for the UI beneath.
         */}
-        <img
+        <WalkingModel
           ref={maleRef}
-          src={ASSETS.heroMale}
+          frames={ASSETS.heroMaleFrames}
           alt="Male model walking the VANTA runway in an oversized trench coat"
-          className="pointer-events-none absolute bottom-0 left-1/2 h-[72vh] w-auto max-w-none -translate-x-1/2 object-contain will-change-transform sm:h-[80vh]"
-          draggable={false}
+          className="pointer-events-none absolute bottom-0 left-1/2 h-[62vh] w-[46vw] -translate-x-1/2 will-change-transform sm:h-[78vh] sm:w-[30vw]"
         />
-        <img
+        <WalkingModel
           ref={femaleRef}
-          src={ASSETS.heroFemale}
+          frames={ASSETS.heroFemaleFrames}
           alt="Female model walking the VANTA runway in an oversized wool coat"
-          className="pointer-events-none absolute bottom-0 left-1/2 h-[72vh] w-auto max-w-none -translate-x-1/2 object-contain opacity-0 will-change-transform sm:h-[80vh]"
-          draggable={false}
+          className="pointer-events-none absolute bottom-0 left-1/2 h-[62vh] w-[46vw] -translate-x-1/2 opacity-0 will-change-transform sm:h-[78vh] sm:w-[30vw]"
         />
 
         {/* -- Foreground chrome ------------------------------------------
@@ -204,19 +236,19 @@ export default function RunwayHero() {
             <div className="rule mt-5 w-14 text-ink" />
           </div>
 
-          <div className="flex items-end justify-between gap-6">
-            <div className="flex items-center gap-6 sm:gap-8">
+          <div className="flex items-end justify-between gap-4">
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-8">
               <a
                 href="#categories"
                 className="pointer-events-auto bg-ink px-7 py-3.5 text-[10px] tracking-[0.24em] text-bone transition-transform duration-500 ease-[var(--ease-editorial)] hover:-translate-y-0.5 sm:px-9"
               >
-                SHOP NOW
+                <HoverText>SHOP NOW</HoverText>
               </a>
               <a
                 href="#fabric"
-                className="pointer-events-auto border-b border-ink pb-1 text-[10px] tracking-[0.24em] text-ink transition-opacity hover:opacity-50"
+                className="pointer-events-auto border-b border-ink pb-1 text-[10px] tracking-[0.24em] text-ink"
               >
-                EXPLORE NEW IN
+                <HoverText>EXPLORE NEW IN</HoverText>
               </a>
             </div>
 

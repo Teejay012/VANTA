@@ -28,9 +28,9 @@ The first `dev` or `build` mirrors the imagery into `public/assets` (see
 | Styling | Tailwind CSS v4 (tokens in `app/globals.css` via `@theme`) |
 | Scroll animation | GSAP + ScrollTrigger |
 | Inertia scrolling | Lenis, driven from the GSAP ticker |
-| 3D / canvas | three.js + @react-three/fiber + @react-three/drei |
+| WebGL | three.js + @react-three/fiber (the cloth shader only) |
 
-## The four sections
+## The sections
 
 ### 1. Runway hero — `components/RunwayHero.tsx`
 
@@ -48,7 +48,13 @@ the timeline reads directly as a scroll percentage:
 | 50 → 95% | the female model enters from the left and exits right |
 | 95 → 100% | the stage dissolves and releases into Section 2 |
 
-Both models are background-removed cutouts, layered between the oversized
+Each model is a **six-frame walk cycle**, not a single still. The scrubbed
+timeline drives the traverse, and `onUpdate` drives the stride from the same
+smoothed progress — so the legs pass, the weight drops, and the feet stay in
+step with the body however fast you scroll. Frames are stacked and switched by
+`visibility`, so a step costs no decode.
+
+All twelve frames are background-removed cutouts, layered between the oversized
 `VANTA` wordmark and the foreground copy. Every floating text layer is
 `pointer-events-none`; only the controls opt back in.
 
@@ -59,6 +65,15 @@ row enters, and a continuous parallax drift whose travel varies per column so
 the row never flattens into one plane. Cards tilt toward the pointer
 (`ui/TiltCard`) and their calls to action are magnetic (`ui/MagneticButton`,
 built on `gsap.quickTo` so a mousemove does not allocate a tween per event).
+
+Text throughout the site answers to the pointer via `ui/HoverText`: the visible
+line lifts away while an identical copy rises into its place, one character at
+a time. It is deliberately CSS-only — this is attached to most of the type on
+the page, so a JS version would mean dozens of listeners and a tween per glyph,
+where a transform plus a staggered `transition-delay` costs nothing and stays
+on the compositor. The split characters are hidden from assistive tech and the
+run is exposed once via `aria-label`, so a screen reader says "WISHLIST" rather
+than spelling it out.
 
 ### 3. Woven fabric canvas — `components/FabricSection.tsx`
 
@@ -80,64 +95,72 @@ Two fallbacks: if the photographic weave cannot be fetched (offline, or a CDN
 without permissive CORS), the shader's procedural warp/weft weave takes over;
 if WebGL is unavailable entirely, the section renders the still image.
 
-### 4. 3D wardrobe — `components/WardrobeSection.tsx`
+### 4. The wardrobe, in the round — `components/WardrobeSection.tsx`
 
-Four pieces on a virtual rail. Drag anywhere on the canvas to spin the active
-piece a full 360°; release and it keeps turning on inertia. Hovering runs a
-*material inspection* — roughness drops and reflections come up, which is what
-reads as leather sheen or fabric nap catching the light. Pagination glides the
-camera along the rail rather than moving the pieces.
+Four pieces, each a photographic **360° turntable**: eight views at 45°
+intervals that `Turntable` scrubs through as you drag. Real photography rather
+than approximated geometry — nothing models leather like a photograph of
+leather — and it needs no WebGL context, which is what makes it work on a
+phone.
 
-The silhouettes are built procedurally in three.js
-(`components/wardrobe/GarmentMesh.tsx`), so the carousel has no asset payload
-and loads instantly. Two details do the heavy lifting: each revolve is squashed
-on Z, because real outerwear is much wider across the shoulders than it is
-front-to-back, and each profile turns a hard corner at the shoulder instead of
-rounding into a dome.
+Pointer Events cover mouse, touch and pen from one path. The stage sets
+`touch-action: none`, so a horizontal drag spins the piece instead of scrolling
+the page, while a vertical swipe still scrolls normally. Release and it coasts
+on inertia; until it is first touched it turns slowly on its own, which
+advertises that it can be turned without needing a label.
 
-To load a real scanned asset instead, set `modelUrl` on a catalogue entry in
-`lib/wardrobe.ts`. `components/wardrobe/GltfGarment.tsx` normalises the model's
-scale, applies the house material, and falls back to the procedural silhouette
-if the fetch fails.
+Only the active piece is mounted — keeping all four would hold 32 decoded
+images in memory for a transition nobody asked for.
 
 ## Assets
 
-Every photograph is served by this site out of `public/assets`. The page makes
-**no third-party image requests at runtime**.
+51 images, all served by this site out of `public/assets`. The page makes **no
+third-party image requests at runtime**.
 
-The images were originally generated with Higgsfield. `npm run assets:sync`
-mirrors them into the repo: it downloads each one, re-encodes it to a
-sensibly-sized WebP, and writes it to `public/assets`. It reads its upstream
-list from `scripts/asset-sources.json`, which is the only place a CDN URL
-appears anywhere in the project.
+They were generated with Higgsfield. `npm run assets:sync` mirrors them into the
+repo: it downloads each one, re-encodes it to a right-sized WebP, and writes it
+to `public/assets`. It reads its upstream list from `scripts/asset-sources.json`,
+which is the only place a CDN URL appears anywhere in the project.
 
 ```bash
 npm run assets:sync             # fetch anything missing
 npm run assets:sync -- --force  # re-download and re-encode everything
 ```
 
-It runs automatically before `dev` and `build`, and short-circuits once the
-files exist — so a checkout with `public/assets` committed builds offline.
-`lib/assets.ts` maps each slot to its local path and is what the components
-import.
+It runs before `dev` and `build` and short-circuits once the files exist, so a
+checkout with `public/assets` committed builds offline. `build` fails loudly if
+an image is missing; `dev` only warns, so a flaky network cannot stop the dev
+server from starting.
 
-The two hero models are background-removed cutouts, so their alpha channel is
-encoded at full quality; flattening them would drop an opaque rectangle over
-the wordmark they are layered against.
+The inventory:
 
-The optional wardrobe GLB is mirrored too, byte-for-byte rather than
-re-encoded, so enabling it in `lib/wardrobe.ts` also stays local.
+| Group | Count | Notes |
+| --- | --- | --- |
+| `walk-male-*`, `walk-female-*` | 12 | Six-frame walk cycles, alpha preserved |
+| `spin-{bomber,trench,tote,boot}-*` | 32 | 360° turntables, 45° apart |
+| `category-*` | 4 | Section 2 cards |
+| `fabric` | 1 | Sampled as a GPU texture, so encoded at higher quality |
+| `editorial`, `editorial-portrait` | 2 | Closing campaign plates |
 
-Components use plain `<img>` rather than `next/image`. These are fixed-slot
-decorative images at known sizes, already optimised at mirror time, so the
-optimiser has nothing left to add.
+The cutouts are encoded at full alpha quality — flattening them would drop an
+opaque rectangle over the wordmark they are layered against.
+
+Every image renders through `components/ui/EditorialImage.tsx`, which fades it
+in once decoded and, if the file is missing, draws a legible placeholder naming
+the asset and the command that fixes it rather than a broken-image glyph. It
+also reconciles against `img.complete` on mount: a cached image can finish
+loading before React attaches `onLoad`, and without that check it would sit
+invisible on every repeat visit.
 
 ## Performance and accessibility
 
-- Both WebGL scenes are `dynamic(..., { ssr: false })`, so three.js stays out of
-  the first load (≈156 kB First Load JS for the page).
+- The cloth canvas is `dynamic(..., { ssr: false })`, so three.js stays out of
+  the first load (≈157 kB First Load JS for the page).
 - DPR is capped at 2; uncapped device pixel ratio is wasted fill rate.
 - Every scrubbed value that changes per frame lives in a ref, not state.
 - `prefers-reduced-motion` disables Lenis and collapses CSS transitions.
-- The wardrobe responds to arrow keys, and its controls are labelled.
+- The wardrobe responds to arrow keys; its controls are labelled and every tap
+  target is at least 44px, with hairline ticks sitting inside taller hit areas.
+- Hover flourishes live behind `@media (hover: hover)` and collapse under
+  `prefers-reduced-motion`, so touch users get no stuck half-states.
 - Layouts are fluid from 390px up.
