@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "assets:sync": "node scripts/sync-assets.mjs",
-    "predev": "node scripts/sync-assets.mjs",
+    "predev": "node scripts/sync-assets.mjs --allow-missing",
     "dev": "next dev",
     "prebuild": "node scripts/sync-assets.mjs",
     "build": "next build",

@@ -12,6 +12,10 @@
  *
  * It runs automatically before `dev` and `build`. Once public/assets is
  * committed the script is a no-op, so those commands still work offline.
+ *
+ * `--allow-missing` downgrades a failure to a warning. `dev` uses it so a
+ * flaky network cannot stop the dev server from starting; `build` does not,
+ * because a production bundle with no imagery is just a broken deploy.
  */
 
 import { createRequire } from "node:module";
@@ -24,6 +28,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = path.join(ROOT, "public", "assets");
 
 const force = process.argv.includes("--force");
+const allowMissing = process.argv.includes("--allow-missing");
 
 /** Terse, non-decorative logging — this runs inside `npm run build`. */
 const log = (msg) => process.stdout.write(`[assets] ${msg}\n`);
@@ -125,5 +130,7 @@ main().catch((error) => {
     "[assets] The site needs these files in public/assets to render. " +
       "Re-run `npm run assets:sync` from a machine with network access.",
   );
-  process.exit(1);
+  // Under --allow-missing the caller has said it would rather start without
+  // imagery than not start at all.
+  process.exit(allowMissing ? 0 : 1);
 });
