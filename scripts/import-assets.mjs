@@ -38,6 +38,17 @@ const sourceDir = args.find((a) => !a.startsWith("--"));
 const log = (msg) => process.stdout.write(`[import] ${msg}\n`);
 
 /** Every file under `dir`, indexed by the UUID in its filename. */
+/** Never worth descending into, and slow when the import runs at a repo root. */
+const SKIP_DIRS = new Set([
+  "node_modules",
+  ".git",
+  ".next",
+  "public",
+  "out",
+  "build",
+  ".vercel",
+]);
+
 async function indexByUuid(dir) {
   const index = new Map();
 
@@ -51,7 +62,7 @@ async function indexByUuid(dir) {
     for (const entry of entries) {
       const full = path.join(current, entry.name);
       if (entry.isDirectory()) {
-        await walk(full);
+        if (!SKIP_DIRS.has(entry.name)) await walk(full);
         continue;
       }
       const uuid = uuidOf(entry.name);

@@ -14,6 +14,13 @@
 
 import { loadManifest, outputName, sourceUrl } from "./lib/mirror.mjs";
 
+// Piping into `head` closes stdout early; without this the process dies with
+// an unhandled EPIPE instead of simply stopping.
+process.stdout.on("error", (error) => {
+  if (error.code === "EPIPE") process.exit(0);
+  throw error;
+});
+
 const urlsOnly = process.argv.includes("--urls");
 
 const manifest = await loadManifest();

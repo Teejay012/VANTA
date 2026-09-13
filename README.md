@@ -137,9 +137,20 @@ server from starting.
 If you would rather fetch the files by hand, two commands cover it:
 
 ```bash
-npm run assets:list                      # every URL, with the name it becomes
-npm run assets:list -- --urls            # bare URLs, for a downloader
-npm run assets:import -- ~/Downloads/x   # pick the downloads up from a folder
+npm run assets:list                             # every URL, with the name it becomes
+npm run --silent assets:list -- --urls          # bare URLs, for a downloader
+npm run assets:import -- ~/Downloads/x          # pick the downloads up from a folder
+```
+
+Use `--silent` whenever you redirect the URL list to a file — without it npm
+prepends a two-line banner to its own stdout and the first two "URLs" your
+downloader sees are that banner:
+
+```bash
+npm run --silent assets:list -- --urls > urls.txt
+xargs -n1 curl -O < urls.txt
+npm run assets:import -- .
+rm -f urls.txt hf_*.png    # the originals; public/assets now holds the WebPs
 ```
 
 **You do not need to rename anything.** `assets:import` finds each file by the
