@@ -48,7 +48,7 @@ the timeline reads directly as a scroll percentage:
 | 50 → 95% | the female model enters from the left and exits right |
 | 95 → 100% | the stage dissolves and releases into Section 2 |
 
-Each model is a **twenty-frame walk**, not a single still. The scrubbed
+Each model is a **forty-frame walk**, not a single still. The scrubbed
 timeline drives the traverse and `onUpdate` drives the stride from the same
 smoothed progress, so the feet stay in step with the body however fast you
 scroll.
@@ -65,15 +65,17 @@ Three things make that read as walking rather than twitching:
    least one foot is always planted) and the torso axis (the alpha-weighted
    centre of the upper body, which is far steadier than the bounding box once
    the legs start scissoring).
-3. **Adjacent frames cross-fade.** Twenty frames across a screen and a half of
-   scroll would otherwise arrive as twenty visible steps. The outgoing frame
-   stays opaque while the incoming one fades in over it — dissolving both at
-   once would let the background show through the model mid-stride.
+3. **Frames are hard cut, never blended.** An earlier version cross-faded into
+   the next frame to soften the stepping; two walk poses overlaid at partial
+   opacity show two sets of legs, and it read as a smeared double exposure.
+   Film has never dissolved one frame into the next — it cuts, and the eye
+   does the rest. Smoothness is bought with frame count instead: forty per
+   model, which is why they travel as sprite sheets.
 
 Playback is linear, start to finish, rather than a looping cycle: the clip is
 not a whole number of strides, so looping it would hitch at the seam.
 
-All forty frames are matted cutouts, layered between the oversized `VANTA`
+All eighty frames are matted cutouts, layered between the oversized `VANTA`
 wordmark and the foreground copy. Every floating text layer is
 `pointer-events-none`; only the controls opt back in.
 
@@ -133,7 +135,7 @@ images in memory for a transition nobody asked for.
 
 ## Assets
 
-79 images, all served by this site out of `public/assets`. The page makes **no
+119 images, all served by this site out of `public/assets`. The page makes **no
 third-party image requests at runtime**.
 
 They were generated with Higgsfield. `npm run assets:sync` mirrors them into the
@@ -186,7 +188,7 @@ The inventory:
 
 | Group | Count | Notes |
 | --- | --- | --- |
-| `walk-male-*`, `walk-female-*` | 40 | Two 20-frame walks, alpha preserved |
+| `walk-male-*`, `walk-female-*` | 80 | Two 40-frame walks, alpha preserved |
 | `spin-{bomber,trench,tote,boot}-*` | 32 | 360° turntables, 45° apart |
 | `category-*` | 4 | Section 2 cards |
 | `fabric` | 1 | Sampled as a GPU texture, so encoded at higher quality |
@@ -195,11 +197,11 @@ The inventory:
 The cutouts are encoded at full alpha quality — flattening them would drop an
 opaque rectangle over the wordmark they are layered against.
 
-The two walk sequences arrive as **sprite sheets**: 20 frames tiled 5x4 in one
+The two walk sequences arrive as **sprite sheets**: 40 frames tiled 8x5 in one
 file, which the pipeline slices, registers and writes out as numbered frames.
 They travel that way because a presigned upload URL runs to about 2.4KB, so
-forty separate uploads would not fit in a single command — and it means a walk
-is one 450KB download rather than twenty.
+eighty separate uploads would not fit in a single command — and it means a walk
+is one 600KB download rather than forty requests.
 
 Every image renders through `components/ui/EditorialImage.tsx`, which fades it
 in once decoded and, if the file is missing, draws a legible placeholder naming

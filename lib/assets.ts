@@ -19,13 +19,13 @@ const sequence = (prefix: string, count: number) =>
 
 export const ASSETS = {
   /**
-   * Hero — twenty frames lifted from one continuous walk, matted and
+   * Hero — forty frames lifted from one continuous walk, matted and
    * registered against each other so the figure does not drift between them.
    * Scroll drives both the traverse and the stride, so the models walk rather
    * than slide.
    */
-  heroMaleFrames: sequence("walk-male", 20),
-  heroFemaleFrames: sequence("walk-female", 20),
+  heroMaleFrames: sequence("walk-male", 40),
+  heroFemaleFrames: sequence("walk-female", 40),
 
   /** Section 2 — category cards. */
   categoryMen: "/assets/category-men.webp",

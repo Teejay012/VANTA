@@ -23,6 +23,8 @@ export default function EditorialImage({
   draggable = false,
   /** Rendered instead of the fallback label for purely decorative slots. */
   quiet = false,
+  /** Skips the fade-in. For frames of a sequence, which must appear on cut. */
+  instant = false,
   ...rest
 }: {
   src: string;
@@ -31,6 +33,7 @@ export default function EditorialImage({
   wrapperClassName?: string;
   draggable?: boolean;
   quiet?: boolean;
+  instant?: boolean;
 } & React.ImgHTMLAttributes<HTMLImageElement>) {
   const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
   const imgRef = useRef<HTMLImageElement>(null);
@@ -73,9 +76,13 @@ export default function EditorialImage({
       draggable={draggable}
       onLoad={() => setState("ready")}
       onError={() => setState("failed")}
-      className={`${className} transition-opacity duration-700 ease-[var(--ease-editorial)] ${
-        state === "ready" ? "opacity-100" : "opacity-0"
-      }`}
+      className={
+        instant
+          ? className
+          : `${className} transition-opacity duration-700 ease-[var(--ease-editorial)] ${
+              state === "ready" ? "opacity-100" : "opacity-0"
+            }`
+      }
       {...rest}
     />
   );

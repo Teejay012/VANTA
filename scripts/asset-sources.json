@@ -4,35 +4,35 @@
   "assets": [
     {
       "name": "walk-male",
-      "file": "317de07b-fde3-41a3-a7b9-fd23f4996f0c.webp",
-      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/317de07b-fde3-41a3-a7b9-fd23f4996f0c.webp",
+      "file": "49c8aac9-ea62-4a14-85fb-2cbcefa227d9.webp",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/49c8aac9-ea62-4a14-85fb-2cbcefa227d9.webp",
       "strip": {
-        "frames": 20,
-        "cols": 5,
-        "rows": 4,
+        "frames": 40,
+        "cols": 8,
+        "rows": 5,
         "prefix": "walk-male"
       },
-      "height": 1200,
+      "height": 1000,
       "alpha": true,
       "quality": 80,
       "stabilise": 0.35,
-      "note": "20 frames of a continuous walk, tiled 5x4. Sliced and registered by the import pipeline into <name>-01..20.webp."
+      "note": "40 frames of a continuous walk, tiled 8x5. Sliced and registered by the import pipeline into <name>-01..40.webp. Played back as hard cuts, so frame count is what buys smoothness."
     },
     {
       "name": "walk-female",
-      "file": "18572f1e-0ed9-4d53-8f46-6191effc944c.webp",
-      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/18572f1e-0ed9-4d53-8f46-6191effc944c.webp",
+      "file": "c6a219d3-6d4a-40c3-9641-8ff8245487cf.webp",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/c6a219d3-6d4a-40c3-9641-8ff8245487cf.webp",
       "strip": {
-        "frames": 20,
-        "cols": 5,
-        "rows": 4,
+        "frames": 40,
+        "cols": 8,
+        "rows": 5,
         "prefix": "walk-female"
       },
-      "height": 1200,
+      "height": 1000,
       "alpha": true,
       "quality": 80,
       "stabilise": 0.35,
-      "note": "20 frames of a continuous walk, tiled 5x4. Sliced and registered by the import pipeline into <name>-01..20.webp."
+      "note": "40 frames of a continuous walk, tiled 8x5. Sliced and registered by the import pipeline into <name>-01..40.webp. Played back as hard cuts, so frame count is what buys smoothness."
     },
     {
       "name": "spin-bomber-01",

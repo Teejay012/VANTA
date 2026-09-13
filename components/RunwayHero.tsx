@@ -12,6 +12,9 @@ import HoverText from "@/components/ui/HoverText";
  * sequence is played straight through as the model crosses — once, start to
  * finish. Looping it would need the clip to be a whole number of strides, and
  * any error would show up as a hitch at the seam.
+ *
+ * Playback is a hard cut per frame, like film. Smoothness is bought with frame
+ * count (forty per model), never by blending neighbours together.
  */
 
 /**
