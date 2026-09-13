@@ -4,11 +4,15 @@ import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
 import { ASSETS } from "@/lib/assets";
-import WalkingModel, { setWalkFrame } from "@/components/hero/WalkingModel";
+import WalkingModel, { setWalkPhase } from "@/components/hero/WalkingModel";
 import HoverText from "@/components/ui/HoverText";
 
-/** Full stride cycles each model completes while crossing the stage. */
-const STRIDES = 4;
+/**
+ * The frames come from one continuous take rather than a looping cycle, so the
+ * sequence is played straight through as the model crosses — once, start to
+ * finish. Looping it would need the clip to be a whole number of strides, and
+ * any error would show up as a hitch at the seam.
+ */
 
 /**
  * SECTION 1 — The Runway Hero.
@@ -44,17 +48,17 @@ export default function RunwayHero() {
     // gsap.context scopes every selector and animation created inside it so a
     // single revert() on unmount cleans up tweens *and* ScrollTriggers.
     const ctx = gsap.context(() => {
-      const frameCount = ASSETS.heroMaleFrames.length;
+      // Both sequences are the same length; the last index is the end of the walk.
+      const lastFrame = ASSETS.heroMaleFrames.length - 1;
 
       // How far off-stage a model has to travel to clear the viewport. Written
       // as a function so `invalidateOnRefresh` can recompute it on resize.
       const exit = () => window.innerWidth * 0.95;
       const entry = () => -window.innerWidth * 0.95;
 
-      /** Maps a 0..1 traverse into a looping stride frame. */
-      const strideFrame = (local: number) =>
-        Math.floor(gsap.utils.clamp(0, 0.9999, local) * STRIDES * frameCount) %
-        frameCount;
+      /** Maps a 0..1 traverse onto the sequence, as a fractional frame. */
+      const walkPhase = (local: number) =>
+        gsap.utils.clamp(0, 1, local) * lastFrame;
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -78,9 +82,9 @@ export default function RunwayHero() {
             // from onUpdate rather than a tween keeps the stride locked to the
             // *smoothed* scrub position, so the feet match the body.
             if (p < 0.5) {
-              setWalkFrame(maleRef.current, strideFrame(p / 0.45));
+              setWalkPhase(maleRef.current, walkPhase(p / 0.45));
             } else {
-              setWalkFrame(femaleRef.current, strideFrame((p - 0.5) / 0.45));
+              setWalkPhase(femaleRef.current, walkPhase((p - 0.5) / 0.45));
             }
           },
         },
@@ -94,19 +98,9 @@ export default function RunwayHero() {
         { x: exit, scale: 1.06, duration: 45 },
         0,
       )
-        // A vertical bob on top of the traverse. The frames already carry the
-        // leg motion; this is the body's rise and fall through the cycle.
-        .to(
-          maleRef.current,
-          {
-            y: -12,
-            duration: 45 / (STRIDES * 2),
-            repeat: STRIDES * 2 - 1,
-            yoyo: true,
-            ease: "sine.inOut",
-          },
-          0,
-        )
+        // The footage already carries the body's rise and fall, so this is a
+        // light float on top rather than a simulated bob.
+        .to(maleRef.current, { y: -8, duration: 22.5, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0)
         .to(maleRef.current, { opacity: 0, duration: 6 }, 39);
 
       /* -- The wordmark breathes across the whole sequence ------------------ */
@@ -139,17 +133,7 @@ export default function RunwayHero() {
           { x: exit, scale: 1.08, duration: 45 },
           50,
         )
-        .to(
-          femaleRef.current,
-          {
-            y: -12,
-            duration: 45 / (STRIDES * 2),
-            repeat: STRIDES * 2 - 1,
-            yoyo: true,
-            ease: "sine.inOut",
-          },
-          50,
-        )
+        .to(femaleRef.current, { y: -8, duration: 22.5, yoyo: true, repeat: 1, ease: "sine.inOut" }, 50)
         .to(femaleRef.current, { opacity: 0, duration: 6 }, 89);
 
       /* -- Phase 4 (95 → 100): release into Section 2 ------------------------ */

@@ -13,13 +13,13 @@
 
 import { readdir, unlink } from "node:fs/promises";
 import path from "node:path";
-import { OUT_DIR, loadManifest, outputName } from "./lib/mirror.mjs";
+import { OUT_DIR, loadManifest, outputNames } from "./lib/mirror.mjs";
 
 const fix = process.argv.includes("--fix");
 const log = (msg) => process.stdout.write(`[check] ${msg}\n`);
 
 const manifest = await loadManifest();
-const expected = new Set(manifest.assets.map(outputName));
+const expected = new Set(manifest.assets.flatMap(outputNames));
 
 let present;
 try {

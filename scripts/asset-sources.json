@@ -3,88 +3,36 @@
   "cdn": "https://d8j0ntlcm91z4.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB",
   "assets": [
     {
-      "name": "walk-male-01",
-      "file": "hf_20260913_151112_2e317b70-3765-4eff-a81e-42c098e87c1f.png",
-      "height": 1400,
+      "name": "walk-male",
+      "file": "317de07b-fde3-41a3-a7b9-fd23f4996f0c.webp",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/317de07b-fde3-41a3-a7b9-fd23f4996f0c.webp",
+      "strip": {
+        "frames": 20,
+        "cols": 5,
+        "rows": 4,
+        "prefix": "walk-male"
+      },
+      "height": 1200,
       "alpha": true,
-      "quality": 80
+      "quality": 80,
+      "stabilise": 0.35,
+      "note": "20 frames of a continuous walk, tiled 5x4. Sliced and registered by the import pipeline into <name>-01..20.webp."
     },
     {
-      "name": "walk-male-02",
-      "file": "hf_20260913_151113_a4719a18-7362-450c-bcba-5fcc23a23be7.png",
-      "height": 1400,
+      "name": "walk-female",
+      "file": "18572f1e-0ed9-4d53-8f46-6191effc944c.webp",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/18572f1e-0ed9-4d53-8f46-6191effc944c.webp",
+      "strip": {
+        "frames": 20,
+        "cols": 5,
+        "rows": 4,
+        "prefix": "walk-female"
+      },
+      "height": 1200,
       "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-male-03",
-      "file": "hf_20260913_151333_42b02fe9-2d87-44a9-8384-55f3e29c8b52.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-male-04",
-      "file": "hf_20260913_151115_4a0c6f13-4136-440c-8815-281d1d739b54.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-male-05",
-      "file": "hf_20260913_151117_56aa0ff2-a9a6-4267-95de-8e04e5030760.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-male-06",
-      "file": "hf_20260913_151119_105ff534-6737-4086-aa4c-b3300dfbdcd0.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-female-01",
-      "file": "hf_20260913_151134_6ea51396-dbf7-490b-9cb1-ca31ee60d02e.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-female-02",
-      "file": "hf_20260913_151135_921c46a0-da79-465b-8db3-db635bdf5ae2.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-female-03",
-      "file": "hf_20260913_151137_07450591-f042-4325-9a97-0fa3401a7de5.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-female-04",
-      "file": "hf_20260913_151139_e9300650-2444-4f78-af95-d52a917abce7.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-female-05",
-      "file": "hf_20260913_151141_653403ee-8122-4769-8c2e-65faef06a908.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
-    },
-    {
-      "name": "walk-female-06",
-      "file": "hf_20260913_151142_30ef7339-b587-4fa0-8eb2-3b5aabc24c17.png",
-      "height": 1400,
-      "alpha": true,
-      "quality": 80
+      "quality": 80,
+      "stabilise": 0.35,
+      "note": "20 frames of a continuous walk, tiled 5x4. Sliced and registered by the import pipeline into <name>-01..20.webp."
     },
     {
       "name": "spin-bomber-01",

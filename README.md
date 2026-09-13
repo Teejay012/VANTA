@@ -48,14 +48,33 @@ the timeline reads directly as a scroll percentage:
 | 50 → 95% | the female model enters from the left and exits right |
 | 95 → 100% | the stage dissolves and releases into Section 2 |
 
-Each model is a **six-frame walk cycle**, not a single still. The scrubbed
-timeline drives the traverse, and `onUpdate` drives the stride from the same
-smoothed progress — so the legs pass, the weight drops, and the feet stay in
-step with the body however fast you scroll. Frames are stacked and switched by
-`visibility`, so a step costs no decode.
+Each model is a **twenty-frame walk**, not a single still. The scrubbed
+timeline drives the traverse and `onUpdate` drives the stride from the same
+smoothed progress, so the feet stay in step with the body however fast you
+scroll.
 
-All twelve frames are background-removed cutouts, layered between the oversized
-`VANTA` wordmark and the foreground copy. Every floating text layer is
+Three things make that read as walking rather than twitching:
+
+1. **The frames come from one continuous take.** They were lifted from a
+   locked-off video clip rather than generated pose by pose, so consecutive
+   frames genuinely belong to the same movement. Independently generated poses
+   drift in scale and framing, and that drift swamps the gait.
+2. **They are registered against each other** at import time — see
+   `scripts/lib/align.mjs`. Every frame is re-seated on two landmarks a walking
+   body actually holds still: the ground line (the lowest opaque pixel; at
+   least one foot is always planted) and the torso axis (the alpha-weighted
+   centre of the upper body, which is far steadier than the bounding box once
+   the legs start scissoring).
+3. **Adjacent frames cross-fade.** Twenty frames across a screen and a half of
+   scroll would otherwise arrive as twenty visible steps. The outgoing frame
+   stays opaque while the incoming one fades in over it — dissolving both at
+   once would let the background show through the model mid-stride.
+
+Playback is linear, start to finish, rather than a looping cycle: the clip is
+not a whole number of strides, so looping it would hitch at the seam.
+
+All forty frames are matted cutouts, layered between the oversized `VANTA`
+wordmark and the foreground copy. Every floating text layer is
 `pointer-events-none`; only the controls opt back in.
 
 ### 2. Editorial reveal — `components/CategoryGrid.tsx`
@@ -114,7 +133,7 @@ images in memory for a transition nobody asked for.
 
 ## Assets
 
-51 images, all served by this site out of `public/assets`. The page makes **no
+79 images, all served by this site out of `public/assets`. The page makes **no
 third-party image requests at runtime**.
 
 They were generated with Higgsfield. `npm run assets:sync` mirrors them into the
@@ -167,7 +186,7 @@ The inventory:
 
 | Group | Count | Notes |
 | --- | --- | --- |
-| `walk-male-*`, `walk-female-*` | 12 | Six-frame walk cycles, alpha preserved |
+| `walk-male-*`, `walk-female-*` | 40 | Two 20-frame walks, alpha preserved |
 | `spin-{bomber,trench,tote,boot}-*` | 32 | 360° turntables, 45° apart |
 | `category-*` | 4 | Section 2 cards |
 | `fabric` | 1 | Sampled as a GPU texture, so encoded at higher quality |
@@ -175,6 +194,12 @@ The inventory:
 
 The cutouts are encoded at full alpha quality — flattening them would drop an
 opaque rectangle over the wordmark they are layered against.
+
+The two walk sequences arrive as **sprite sheets**: 20 frames tiled 5x4 in one
+file, which the pipeline slices, registers and writes out as numbered frames.
+They travel that way because a presigned upload URL runs to about 2.4KB, so
+forty separate uploads would not fit in a single command — and it means a walk
+is one 450KB download rather than twenty.
 
 Every image renders through `components/ui/EditorialImage.tsx`, which fades it
 in once decoded and, if the file is missing, draws a legible placeholder naming

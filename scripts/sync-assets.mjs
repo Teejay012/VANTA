@@ -23,10 +23,12 @@ import path from "node:path";
 import {
   OUT_DIR,
   encodeAsset,
+  encodeStrip,
   exists,
   loadManifest,
   loadSharp,
   outputName,
+  outputNames,
   sourceUrl,
 } from "./lib/mirror.mjs";
 
@@ -43,9 +45,14 @@ async function main() {
   // checkout never needs connectivity.
   const pending = [];
   for (const asset of manifest.assets) {
-    const out = path.join(OUT_DIR, outputName(asset));
-    if (!force && (await exists(out))) continue;
-    pending.push({ ...asset, out });
+    // A sprite sheet yields many files; it is re-fetched unless all of them
+    // are already on disk, since a half-sliced sequence cannot be registered.
+    let complete = true;
+    for (const name of outputNames(asset)) {
+      if (!(await exists(path.join(OUT_DIR, name)))) complete = false;
+    }
+    if (!force && complete) continue;
+    pending.push(asset);
   }
 
   if (pending.length === 0) {
@@ -60,18 +67,28 @@ async function main() {
 
   for (const asset of pending) {
     const url = sourceUrl(manifest, asset);
-
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`${asset.name}: ${response.status} fetching ${url}`);
     }
     const original = Buffer.from(await response.arrayBuffer());
-    const encoded = await encodeAsset(original, asset, sharp);
-    await writeFile(asset.out, encoded);
+    const size = (original.length / 1024 / 1024).toFixed(1);
 
-    const from = (original.length / 1024 / 1024).toFixed(1);
-    const to = (encoded.length / 1024).toFixed(0);
-    log(`${outputName(asset)}  ${from}MB -> ${to}KB`);
+    if (asset.strip) {
+      const { encoded, plan } = await encodeStrip(asset, original, sharp);
+      const names = outputNames(asset);
+      log(
+        `${asset.name}: ${size}MB sheet -> ${names.length} frames registered onto ${plan.canvasWidth}x${plan.canvasHeight}`,
+      );
+      for (let i = 0; i < names.length; i++) {
+        await writeFile(path.join(OUT_DIR, names[i]), encoded[i]);
+      }
+      continue;
+    }
+
+    const encoded = await encodeAsset(original, asset, sharp);
+    await writeFile(path.join(OUT_DIR, outputName(asset)), encoded);
+    log(`${outputName(asset)}  ${size}MB -> ${(encoded.length / 1024).toFixed(0)}KB`);
   }
 
   log("done — commit public/assets so the site stops depending on the CDN");

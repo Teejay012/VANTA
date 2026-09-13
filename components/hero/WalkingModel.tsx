@@ -27,8 +27,11 @@ const WalkingModel = forwardRef<
           key={src}
           data-walk-frame={index}
           className="absolute inset-0"
-          // Frame 0 is the poster; the rest wait to be switched in.
-          style={{ visibility: index === 0 ? "visible" : "hidden" }}
+          // Frame 0 is the poster; the rest wait to be blended in.
+          style={{
+            visibility: index === 0 ? "visible" : "hidden",
+            opacity: index === 0 ? 1 : 0,
+          }}
         >
           <EditorialImage
             src={src}
@@ -49,21 +52,58 @@ const WalkingModel = forwardRef<
 export default WalkingModel;
 
 /**
- * Shows frame `index` of a WalkingModel and hides the rest.
+ * Places a WalkingModel at a fractional point in its sequence.
  *
- * Called from a scroll handler on every tick, so it touches the DOM directly
- * and bails the moment the frame has not actually changed — React state here
- * would mean a render per stride.
+ * `phase` is a float in [0, frames-1]: the whole part picks the frame, the
+ * fraction cross-fades the next one in over it. Without that blend, twenty
+ * frames stretched over a screen-and-a-half of scroll arrive as twenty visible
+ * steps; with it the stride reads as continuous however slowly you scroll.
+ *
+ * The outgoing frame stays fully opaque underneath while the incoming one
+ * fades in on top — dissolving both at once would let the background show
+ * through the model mid-step.
+ *
+ * Called on every scroll tick, so it writes to the DOM directly and touches
+ * only the frames whose state actually changes.
  */
-export function setWalkFrame(wrapper: HTMLElement | null, index: number) {
+export function setWalkPhase(wrapper: HTMLElement | null, phase: number) {
   if (!wrapper) return;
 
-  const previous = Number(wrapper.dataset.currentFrame ?? -1);
-  if (previous === index) return;
-  wrapper.dataset.currentFrame = String(index);
-
   const frames = wrapper.querySelectorAll<HTMLElement>("[data-walk-frame]");
-  frames.forEach((frame, i) => {
-    frame.style.visibility = i === index ? "visible" : "hidden";
-  });
+  if (frames.length === 0) return;
+
+  const last = frames.length - 1;
+  const clamped = Math.min(Math.max(phase, 0), last);
+  const current = Math.min(Math.floor(clamped), last);
+  const next = Math.min(current + 1, last);
+  const blend = clamped - current;
+
+  // Skip the DOM work when neither the pair nor the blend has moved enough to
+  // be visible — scrubbing settles with many sub-pixel updates.
+  const key = `${current}:${blend.toFixed(2)}`;
+  if (wrapper.dataset.walkPhase === key) return;
+
+  const previous = wrapper.dataset.walkPair?.split(",").map(Number) ?? [];
+  wrapper.dataset.walkPhase = key;
+  wrapper.dataset.walkPair = `${current},${next}`;
+
+  // Retire whichever frames were showing and are no longer part of the pair.
+  for (const index of previous) {
+    if (index !== current && index !== next && frames[index]) {
+      frames[index].style.visibility = "hidden";
+      frames[index].style.opacity = "0";
+    }
+  }
+
+  const base = frames[current];
+  base.style.visibility = "visible";
+  base.style.opacity = "1";
+  base.style.zIndex = "1";
+
+  if (next !== current) {
+    const incoming = frames[next];
+    incoming.style.visibility = "visible";
+    incoming.style.opacity = String(blend);
+    incoming.style.zIndex = "2";
+  }
 }

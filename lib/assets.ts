@@ -19,12 +19,13 @@ const sequence = (prefix: string, count: number) =>
 
 export const ASSETS = {
   /**
-   * Hero — six-frame walk cycles, backgrounds removed so the models layer
-   * between the wordmark and the foreground copy. Scroll drives both the
-   * traverse and the stride, so they actually walk rather than slide.
+   * Hero — twenty frames lifted from one continuous walk, matted and
+   * registered against each other so the figure does not drift between them.
+   * Scroll drives both the traverse and the stride, so the models walk rather
+   * than slide.
    */
-  heroMaleFrames: sequence("walk-male", 6),
-  heroFemaleFrames: sequence("walk-female", 6),
+  heroMaleFrames: sequence("walk-male", 20),
+  heroFemaleFrames: sequence("walk-female", 20),
 
   /** Section 2 — category cards. */
   categoryMen: "/assets/category-men.webp",
