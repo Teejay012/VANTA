@@ -9,3 +9,9 @@ npm-debug.log*
 next-env.d.ts
 .vercel
 *.tsbuildinfo
+
+# Downloaded originals. `npm run assets:import` converts these into
+# public/assets/*.webp; the multi-megabyte sources must not be committed.
+hf_*.png
+public/assets/*.png
+urls.txt
