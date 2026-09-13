@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — a strictly monochrome palette. Matte black, off-white and a
+   light neutral stone are the only three grounds used across the whole site.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-ink: #0a0a0a; /* matte black */
+  --color-ink-soft: #1c1c1c;
+  --color-bone: #f8f8f8; /* off-white */
+  --color-stone: #e8e6e1; /* light neutral stone */
+  --color-stone-deep: #d6d3cc;
+  --color-smoke: #8a8a86;
+
+  --font-display: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------- */
+
+html {
+  /* Lenis drives scrolling; native smooth scrolling would fight it. */
+  scroll-behavior: auto;
+}
+
+body {
+  background-color: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Lenis adds these while it is in control of the scroll position. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Editorial type helpers --------------------------------------------------- */
+
+.eyebrow {
+  font-size: 0.625rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.display {
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+  text-transform: uppercase;
+}
+
+/* A thin rule that draws itself in when revealed. */
+.rule {
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0.25;
+}
+
+/* Respect users who would rather not be moved around. ---------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Minimal, monochrome scrollbar. */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-stone);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink);
+}
