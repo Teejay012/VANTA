@@ -132,6 +132,26 @@ checkout with `public/assets` committed builds offline. `build` fails loudly if
 an image is missing; `dev` only warns, so a flaky network cannot stop the dev
 server from starting.
 
+### Downloading them yourself
+
+If you would rather fetch the files by hand, two commands cover it:
+
+```bash
+npm run assets:list                      # every URL, with the name it becomes
+npm run assets:list -- --urls            # bare URLs, for a downloader
+npm run assets:import -- ~/Downloads/x   # pick the downloads up from a folder
+```
+
+**You do not need to rename anything.** `assets:import` finds each file by the
+generation id embedded in its name, so it does not care what the files are
+called, how deeply they are nested, or whether your browser appended `(1)` to
+some of them. It renames and re-encodes each match to exactly what the site
+expects, and lists anything it could not find along with that file's URL — so a
+partial download just needs a second pass rather than starting over.
+
+Both routes share `scripts/lib/mirror.mjs`, so downloading and importing
+produce byte-identical output.
+
 The inventory:
 
 | Group | Count | Notes |
