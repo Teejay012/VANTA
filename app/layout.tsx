@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "GAZU — Fashion That Moves With You",
+  title: "VANTA — Fashion That Moves With You",
   description:
     "An interactive editorial runway. New collection 2026, shot in monochrome.",
 };

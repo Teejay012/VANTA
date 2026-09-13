@@ -59,9 +59,9 @@ export default function Navigation() {
         <a
           href="#top"
           className="display text-xl tracking-[0.32em] sm:text-2xl"
-          aria-label="GAZU — home"
+          aria-label="VANTA — home"
         >
-          GAZU
+          VANTA
         </a>
 
         <ul className="hidden gap-6 text-[10px] tracking-[0.22em] md:flex">

@@ -1,0 +1,78 @@
+{
+  "_comment": "Upstream sources for the images in public/assets. Every file here was generated with Higgsfield; `npm run assets:sync` mirrors them into the repo so the running site never touches a third-party CDN. Once public/assets is committed, the sync is a no-op and the URLs below are only provenance.",
+  "cdn": "https://d8j0ntlcm91z4.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB",
+  "assets": [
+    {
+      "name": "hero-male",
+      "file": "hf_20260913_134025_547c2409-30b7-45e1-a7c0-8f3a8f885043.png",
+      "height": 1600,
+      "alpha": true,
+      "quality": 82,
+      "note": "Hero model, background removed \u2014 alpha must survive."
+    },
+    {
+      "name": "hero-female",
+      "file": "hf_20260913_134129_961cc757-135f-429f-843a-d7a4906b0f79.png",
+      "height": 1600,
+      "alpha": true,
+      "quality": 82,
+      "note": "Hero model, background removed \u2014 alpha must survive."
+    },
+    {
+      "name": "category-men",
+      "file": "hf_20260913_133910_2ee88d72-1556-4267-b187-51a86a87bbea.png",
+      "width": 1000,
+      "quality": 80
+    },
+    {
+      "name": "category-women",
+      "file": "hf_20260913_133910_ecb50a50-08e8-4da9-a0c9-529f1cf998d3.png",
+      "width": 1000,
+      "quality": 80
+    },
+    {
+      "name": "category-kids",
+      "file": "hf_20260913_133910_e0b4d92c-2c2d-4322-a58c-d7b389a638bf.png",
+      "width": 1000,
+      "quality": 80
+    },
+    {
+      "name": "category-accessories",
+      "file": "hf_20260913_133910_0df692a7-bbdc-4f8e-a8f9-e8e35d167b47.png",
+      "width": 1000,
+      "quality": 80
+    },
+    {
+      "name": "fabric",
+      "file": "hf_20260913_133910_026b6734-925a-4781-8e86-5f2792895f71.png",
+      "width": 2000,
+      "quality": 86,
+      "note": "Sampled as a GPU texture \u2014 keep the weave detail."
+    },
+    {
+      "name": "editorial",
+      "file": "hf_20260913_133910_dfca8048-db99-44b5-bc06-8f0616edc9fc.png",
+      "width": 2000,
+      "quality": 82
+    },
+    {
+      "name": "garment-jacket",
+      "file": "hf_20260913_133910_93928abb-d69b-4a10-872b-466d03045787.png",
+      "width": 900,
+      "quality": 80
+    },
+    {
+      "name": "garment-bag",
+      "file": "hf_20260913_133910_97415d8e-1430-49c2-a32f-6a24b680de12.png",
+      "width": 900,
+      "quality": 80
+    },
+    {
+      "name": "garment-bomber",
+      "file": "hf_20260913_134148_a2fa735f-8a68-480d-af26-b7b9784af5ff.glb",
+      "raw": true,
+      "ext": "glb",
+      "note": "Optional 3D mesh for the wardrobe carousel \u2014 see lib/wardrobe.ts. Copied byte-for-byte; sharp is not involved."
+    }
+  ]
+}

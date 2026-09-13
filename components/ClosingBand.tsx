@@ -72,7 +72,7 @@ export default function ClosingBand() {
         <img
           data-closing-media
           src={ASSETS.editorial}
-          alt="GAZU new season campaign"
+          alt="VANTA new season campaign"
           className="absolute inset-0 h-full w-full object-cover grayscale will-change-transform"
           draggable={false}
         />
@@ -128,7 +128,7 @@ export default function ClosingBand() {
       <footer className="px-4 py-16 sm:px-8 sm:py-20">
         <div className="flex flex-col gap-12 sm:flex-row sm:justify-between">
           <div>
-            <p className="display text-5xl tracking-[0.18em] sm:text-7xl">GAZU</p>
+            <p className="display text-5xl tracking-[0.18em] sm:text-7xl">VANTA</p>
             <p className="mt-5 max-w-xs text-xs font-light leading-relaxed text-ink/50">
               Fashion that moves with you. Collection 2026, shot in monochrome.
             </p>
@@ -157,7 +157,7 @@ export default function ClosingBand() {
 
         <div className="rule mt-14" />
         <p className="mt-6 text-[10px] tracking-[0.22em] text-ink/40">
-          &copy; 2026 GAZU — ALL RIGHTS RESERVED
+          &copy; 2026 VANTA — ALL RIGHTS RESERVED
         </p>
       </footer>
     </section>

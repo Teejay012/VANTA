@@ -35,14 +35,14 @@ export const WARDROBE: Garment[] = [
     silhouette: "bomber",
     surface: "leather",
     // A mesh reconstructed from this piece's campaign still with Higgsfield's
-    // image-to-3D model. Uncomment to load it instead of the procedural
-    // silhouette; GltfGarment normalises its scale, applies the house
-    // material, and falls back to the silhouette if the fetch or the CORS
-    // preflight fails. Left off by default because the source still is of a
-    // *folded* jacket, so the reconstruction is a folded mass rather than a
-    // hanging garment — worth a look, not worth being the default.
-    // modelUrl:
-    //   "https://d8j0ntlcm91z4.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/hf_20260913_134148_a2fa735f-8a68-480d-af26-b7b9784af5ff.glb",
+    // image-to-3D model, mirrored into public/assets alongside the images.
+    // Uncomment to load it instead of the procedural silhouette; GltfGarment
+    // normalises its scale, applies the house material, and falls back to the
+    // silhouette if the file is missing or fails to parse. Left off by default
+    // because the source still is of a *folded* jacket, so the reconstruction
+    // is a folded mass rather than a hanging garment — worth a look, not worth
+    // being the default.
+    // modelUrl: "/assets/garment-bomber.glb",
   },
   {
     id: "tote",

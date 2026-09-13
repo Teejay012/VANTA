@@ -152,9 +152,9 @@ export default function RunwayHero() {
         >
           <h1
             ref={wordmarkRef}
-            className="display select-none text-[26vw] leading-none text-ink will-change-transform"
+            className="display select-none text-[21vw] leading-none text-ink will-change-transform"
           >
-            GAZU
+            VANTA
           </h1>
         </div>
 
@@ -174,14 +174,14 @@ export default function RunwayHero() {
         <img
           ref={maleRef}
           src={ASSETS.heroMale}
-          alt="Male model walking the GAZU runway in an oversized trench coat"
+          alt="Male model walking the VANTA runway in an oversized trench coat"
           className="pointer-events-none absolute bottom-0 left-1/2 h-[72vh] w-auto max-w-none -translate-x-1/2 object-contain will-change-transform sm:h-[80vh]"
           draggable={false}
         />
         <img
           ref={femaleRef}
           src={ASSETS.heroFemale}
-          alt="Female model walking the GAZU runway in an oversized wool coat"
+          alt="Female model walking the VANTA runway in an oversized wool coat"
           className="pointer-events-none absolute bottom-0 left-1/2 h-[72vh] w-auto max-w-none -translate-x-1/2 object-contain opacity-0 will-change-transform sm:h-[80vh]"
           draggable={false}
         />

@@ -1,4 +1,4 @@
-# GAZU — Interactive Editorial Fashion Landing
+# VANTA — Interactive Editorial Fashion Landing
 
 A luxury, scroll-driven fashion landing page: a pinned runway sequence, a
 staggered editorial reveal, a WebGL cloth that unrolls as you read it, and a
@@ -16,6 +16,9 @@ npm run build && npm start
 ```
 
 Node 20+.
+
+The first `dev` or `build` mirrors the imagery into `public/assets` (see
+[Assets](#assets)); that step needs network access once, then never again.
 
 ## Stack
 
@@ -46,7 +49,7 @@ the timeline reads directly as a scroll percentage:
 | 95 → 100% | the stage dissolves and releases into Section 2 |
 
 Both models are background-removed cutouts, layered between the oversized
-`GAZU` wordmark and the foreground copy. Every floating text layer is
+`VANTA` wordmark and the foreground copy. Every floating text layer is
 `pointer-events-none`; only the controls opt back in.
 
 ### 2. Editorial reveal — `components/CategoryGrid.tsx`
@@ -99,15 +102,35 @@ if the fetch fails.
 
 ## Assets
 
-Every photograph was generated with **Higgsfield** and is served from their CDN.
-The URLs live in one module, `lib/assets.ts` — point `CDN` at your own host to
-self-host them. The two hero models were additionally run through background
-removal so they can be layered mid-ground.
+Every photograph is served by this site out of `public/assets`. The page makes
+**no third-party image requests at runtime**.
 
-The page uses plain `<img>` rather than `next/image` for these: the images are
-remote and already sized for their slots, and this keeps Next's optimizer (and
-its server-side fetch) out of the path. `next.config.ts` already allows the host
-under `images.remotePatterns` if you switch.
+The images were originally generated with Higgsfield. `npm run assets:sync`
+mirrors them into the repo: it downloads each one, re-encodes it to a
+sensibly-sized WebP, and writes it to `public/assets`. It reads its upstream
+list from `scripts/asset-sources.json`, which is the only place a CDN URL
+appears anywhere in the project.
+
+```bash
+npm run assets:sync             # fetch anything missing
+npm run assets:sync -- --force  # re-download and re-encode everything
+```
+
+It runs automatically before `dev` and `build`, and short-circuits once the
+files exist — so a checkout with `public/assets` committed builds offline.
+`lib/assets.ts` maps each slot to its local path and is what the components
+import.
+
+The two hero models are background-removed cutouts, so their alpha channel is
+encoded at full quality; flattening them would drop an opaque rectangle over
+the wordmark they are layered against.
+
+The optional wardrobe GLB is mirrored too, byte-for-byte rather than
+re-encoded, so enabling it in `lib/wardrobe.ts` also stays local.
+
+Components use plain `<img>` rather than `next/image`. These are fixed-slot
+decorative images at known sizes, already optimised at mirror time, so the
+optimiser has nothing left to add.
 
 ## Performance and accessibility
 

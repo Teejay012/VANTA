@@ -1,9 +1,12 @@
 {
-  "name": "gazu",
+  "name": "vanta",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "assets:sync": "node scripts/sync-assets.mjs",
+    "predev": "node scripts/sync-assets.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/sync-assets.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -24,6 +27,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.175.0",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.0.17",
     "typescript": "^5.8.2"
   }
