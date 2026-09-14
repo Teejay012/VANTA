@@ -23,12 +23,10 @@ import path from "node:path";
 import {
   OUT_DIR,
   encodeAsset,
-  encodeStrip,
   exists,
   loadManifest,
   loadSharp,
   outputName,
-  outputNames,
   sourceUrl,
 } from "./lib/mirror.mjs";
 
@@ -45,13 +43,7 @@ async function main() {
   // checkout never needs connectivity.
   const pending = [];
   for (const asset of manifest.assets) {
-    // A sprite sheet yields many files; it is re-fetched unless all of them
-    // are already on disk, since a half-sliced sequence cannot be registered.
-    let complete = true;
-    for (const name of outputNames(asset)) {
-      if (!(await exists(path.join(OUT_DIR, name)))) complete = false;
-    }
-    if (!force && complete) continue;
+    if (!force && (await exists(path.join(OUT_DIR, outputName(asset))))) continue;
     pending.push(asset);
   }
 
@@ -74,17 +66,6 @@ async function main() {
     const original = Buffer.from(await response.arrayBuffer());
     const size = (original.length / 1024 / 1024).toFixed(1);
 
-    if (asset.strip) {
-      const { encoded, plan } = await encodeStrip(asset, original, sharp);
-      const names = outputNames(asset);
-      log(
-        `${asset.name}: ${size}MB sheet -> ${names.length} frames registered onto ${plan.canvasWidth}x${plan.canvasHeight}`,
-      );
-      for (let i = 0; i < names.length; i++) {
-        await writeFile(path.join(OUT_DIR, names[i]), encoded[i]);
-      }
-      continue;
-    }
 
     const encoded = await encodeAsset(original, asset, sharp);
     await writeFile(path.join(OUT_DIR, outputName(asset)), encoded);

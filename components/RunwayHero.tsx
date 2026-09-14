@@ -1,21 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
 import { ASSETS } from "@/lib/assets";
-import WalkingModel, { setWalkPhase } from "@/components/hero/WalkingModel";
+import WalkingModel from "@/components/hero/WalkingModel";
 import HoverText from "@/components/ui/HoverText";
 
-/**
- * The frames come from one continuous take rather than a looping cycle, so the
- * sequence is played straight through as the model crosses — once, start to
- * finish. Looping it would need the clip to be a whole number of strides, and
- * any error would show up as a hitch at the seam.
- *
- * Playback is a hard cut per frame, like film. Smoothness is bought with frame
- * count (forty per model), never by blending neighbours together.
- */
 
 /**
  * SECTION 1 — The Runway Hero.
@@ -33,9 +24,9 @@ import HoverText from "@/components/ui/HoverText";
  *   50 → 95   the female model enters from the left and exits right
  *   95 → 100  the stage dissolves and releases into Section 2
  *
- * Each model is a stack of six walk-cycle frames rather than one still. The
- * scroll position drives both the traverse *and* the stride, so the models
- * actually walk — legs passing, weight dropping — instead of sliding.
+ * The models themselves are looping animated cutouts that walk at their own
+ * natural cadence; this timeline only carries them across the stage. See
+ * WalkingModel for why the gait is deliberately not scroll-driven.
  */
 export default function RunwayHero() {
   const trackRef = useRef<HTMLElement>(null);
@@ -47,21 +38,20 @@ export default function RunwayHero() {
   const sweepRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
 
+  // The second clip is fetched only once the first model is most of the way
+  // across, so it never competes with first paint. The ref guards the setState
+  // so this fires once rather than on every scroll tick.
+  const [femaleLoaded, setFemaleLoaded] = useState(false);
+  const femaleRequested = useRef(false);
+
   useIsomorphicLayoutEffect(() => {
     // gsap.context scopes every selector and animation created inside it so a
     // single revert() on unmount cleans up tweens *and* ScrollTriggers.
     const ctx = gsap.context(() => {
-      // Both sequences are the same length; the last index is the end of the walk.
-      const lastFrame = ASSETS.heroMaleFrames.length - 1;
-
       // How far off-stage a model has to travel to clear the viewport. Written
       // as a function so `invalidateOnRefresh` can recompute it on resize.
       const exit = () => window.innerWidth * 0.95;
       const entry = () => -window.innerWidth * 0.95;
-
-      /** Maps a 0..1 traverse onto the sequence, as a fractional frame. */
-      const walkPhase = (local: number) =>
-        gsap.utils.clamp(0, 1, local) * lastFrame;
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -75,19 +65,15 @@ export default function RunwayHero() {
           scrub: 1.1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
-            const p = self.progress;
-
             if (progressRef.current) {
-              progressRef.current.style.transform = `scaleX(${p})`;
+              progressRef.current.style.transform = `scaleX(${self.progress})`;
             }
 
-            // Advance whichever model is currently on the runway. Driving this
-            // from onUpdate rather than a tween keeps the stride locked to the
-            // *smoothed* scrub position, so the feet match the body.
-            if (p < 0.5) {
-              setWalkPhase(maleRef.current, walkPhase(p / 0.45));
-            } else {
-              setWalkPhase(femaleRef.current, walkPhase((p - 0.5) / 0.45));
+            // She enters at 50%; start fetching at 28% so the clip has landed
+            // and begun playing before she is due.
+            if (self.progress > 0.28 && !femaleRequested.current) {
+              femaleRequested.current = true;
+              setFemaleLoaded(true);
             }
           },
         },
@@ -101,9 +87,6 @@ export default function RunwayHero() {
         { x: exit, scale: 1.06, duration: 45 },
         0,
       )
-        // The footage already carries the body's rise and fall, so this is a
-        // light float on top rather than a simulated bob.
-        .to(maleRef.current, { y: -8, duration: 22.5, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0)
         .to(maleRef.current, { opacity: 0, duration: 6 }, 39);
 
       /* -- The wordmark breathes across the whole sequence ------------------ */
@@ -136,7 +119,6 @@ export default function RunwayHero() {
           { x: exit, scale: 1.08, duration: 45 },
           50,
         )
-        .to(femaleRef.current, { y: -8, duration: 22.5, yoyo: true, repeat: 1, ease: "sine.inOut" }, 50)
         .to(femaleRef.current, { opacity: 0, duration: 6 }, 89);
 
       /* -- Phase 4 (95 → 100): release into Section 2 ------------------------ */
@@ -194,13 +176,13 @@ export default function RunwayHero() {
         */}
         <WalkingModel
           ref={maleRef}
-          frames={ASSETS.heroMaleFrames}
+          src={ASSETS.heroMaleWalk}
           alt="Male model walking the VANTA runway in an oversized trench coat"
           className="pointer-events-none absolute bottom-0 left-1/2 h-[62vh] w-[46vw] -translate-x-1/2 will-change-transform sm:h-[78vh] sm:w-[30vw]"
         />
         <WalkingModel
           ref={femaleRef}
-          frames={ASSETS.heroFemaleFrames}
+          src={femaleLoaded ? ASSETS.heroFemaleWalk : undefined}
           alt="Female model walking the VANTA runway in an oversized wool coat"
           className="pointer-events-none absolute bottom-0 left-1/2 h-[62vh] w-[46vw] -translate-x-1/2 opacity-0 will-change-transform sm:h-[78vh] sm:w-[30vw]"
         />

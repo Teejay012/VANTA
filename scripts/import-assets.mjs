@@ -22,12 +22,10 @@ import path from "node:path";
 import {
   OUT_DIR,
   encodeAsset,
-  encodeStrip,
   exists,
   loadManifest,
   loadSharp,
   outputName,
-  outputNames,
   sourceUrl,
   uuidOf,
 } from "./lib/mirror.mjs";
@@ -105,14 +103,8 @@ async function main() {
   let skipped = 0;
 
   for (const asset of manifest.assets) {
-    const names = outputNames(asset);
-
-    let complete = true;
-    for (const name of names) {
-      if (!(await exists(path.join(OUT_DIR, name)))) complete = false;
-    }
-    if (!force && complete) {
-      skipped += names.length;
+    if (!force && (await exists(path.join(OUT_DIR, outputName(asset))))) {
+      skipped++;
       continue;
     }
 
@@ -126,17 +118,6 @@ async function main() {
     const original = await readFile(found);
     const size = (original.length / 1024 / 1024).toFixed(1);
 
-    if (asset.strip) {
-      const { encoded, plan } = await encodeStrip(asset, original, sharp);
-      log(
-        `${asset.name}: ${size}MB sheet -> ${names.length} frames registered onto ${plan.canvasWidth}x${plan.canvasHeight}  (${path.basename(found)})`,
-      );
-      for (let i = 0; i < names.length; i++) {
-        if (!dry) await writeFile(path.join(OUT_DIR, names[i]), encoded[i]);
-        written++;
-      }
-      continue;
-    }
 
     const encoded = await encodeAsset(original, asset, sharp);
     if (!dry) await writeFile(path.join(OUT_DIR, outputName(asset)), encoded);

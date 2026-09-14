@@ -4,35 +4,19 @@
   "assets": [
     {
       "name": "walk-male",
-      "file": "49c8aac9-ea62-4a14-85fb-2cbcefa227d9.webp",
-      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/49c8aac9-ea62-4a14-85fb-2cbcefa227d9.webp",
-      "strip": {
-        "frames": 40,
-        "cols": 8,
-        "rows": 5,
-        "prefix": "walk-male"
-      },
-      "height": 1000,
-      "alpha": true,
-      "quality": 80,
-      "stabilise": 0.35,
-      "note": "40 frames of a continuous walk, tiled 8x5. Sliced and registered by the import pipeline into <name>-01..40.webp. Played back as hard cuts, so frame count is what buys smoothness."
+      "file": "81cefaa0-06cb-44fe-9c69-95f9a911a236.webp",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/81cefaa0-06cb-44fe-9c69-95f9a911a236.webp",
+      "raw": true,
+      "ext": "webp",
+      "note": "Looping walk cutout, 100 frames at 24fps, cut at a pose-matched frame so the loop is seamless. Plays itself; the hero only moves it across the stage."
     },
     {
       "name": "walk-female",
-      "file": "c6a219d3-6d4a-40c3-9641-8ff8245487cf.webp",
-      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/c6a219d3-6d4a-40c3-9641-8ff8245487cf.webp",
-      "strip": {
-        "frames": 40,
-        "cols": 8,
-        "rows": 5,
-        "prefix": "walk-female"
-      },
-      "height": 1000,
-      "alpha": true,
-      "quality": 80,
-      "stabilise": 0.35,
-      "note": "40 frames of a continuous walk, tiled 8x5. Sliced and registered by the import pipeline into <name>-01..40.webp. Played back as hard cuts, so frame count is what buys smoothness."
+      "file": "94b37979-e63b-4331-b5cb-5a26f464a8e8.webp",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3E4aC5gSRF4DinvQCUJBbOppkSB/94b37979-e63b-4331-b5cb-5a26f464a8e8.webp",
+      "raw": true,
+      "ext": "webp",
+      "note": "Looping walk cutout, 97 frames at 24fps, cut at a pose-matched frame so the loop is seamless. Plays itself; the hero only moves it across the stage."
     },
     {
       "name": "spin-bomber-01",

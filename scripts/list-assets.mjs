@@ -12,7 +12,7 @@
  * the id inside each filename.
  */
 
-import { loadManifest, outputNames, sourceUrl } from "./lib/mirror.mjs";
+import { loadManifest, outputName, sourceUrl } from "./lib/mirror.mjs";
 
 // Piping into `head` closes stdout early; without this the process dies with
 // an unhandled EPIPE instead of simply stopping.
@@ -32,9 +32,8 @@ if (urlsOnly) {
 } else {
   process.stdout.write(`${manifest.assets.length} assets\n\n`);
   for (const asset of manifest.assets) {
-    const names = outputNames(asset);
-    const label =
-      names.length === 1 ? names[0] : `${asset.name} (${names.length} frames)`;
-    process.stdout.write(`${label.padEnd(28)} ${sourceUrl(manifest, asset)}\n`);
+    process.stdout.write(
+      `${outputName(asset).padEnd(28)} ${sourceUrl(manifest, asset)}\n`,
+    );
   }
 }

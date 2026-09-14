@@ -10,22 +10,15 @@
  * is a no-op once `public/assets` is populated.
  */
 
-/** Builds a numbered frame sequence: prefix-01.webp … prefix-0N.webp */
-const sequence = (prefix: string, count: number) =>
-  Array.from(
-    { length: count },
-    (_, i) => `/assets/${prefix}-${String(i + 1).padStart(2, "0")}.webp`,
-  );
-
 export const ASSETS = {
   /**
-   * Hero — forty frames lifted from one continuous walk, matted and
-   * registered against each other so the figure does not drift between them.
-   * Scroll drives both the traverse and the stride, so the models walk rather
-   * than slide.
+   * Hero — looping animated cutouts. Each is a matted clip of the model
+   * walking on the spot, cut at a pose-matched frame so the loop is seamless,
+   * and it plays at its own cadence. Scroll moves them across the stage but
+   * does not drive the gait; see components/hero/WalkingModel.tsx.
    */
-  heroMaleFrames: sequence("walk-male", 40),
-  heroFemaleFrames: sequence("walk-female", 40),
+  heroMaleWalk: "/assets/walk-male.webp",
+  heroFemaleWalk: "/assets/walk-female.webp",
 
   /** Section 2 — category cards. */
   categoryMen: "/assets/category-men.webp",
